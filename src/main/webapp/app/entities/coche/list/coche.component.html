@@ -6,11 +6,33 @@
       <form name="editForm" role="form" novalidate (ngSubmit)="buscarColor()" [formGroup]="editForm">
         <div class="form-group">
           <label class="form-control-label" for="field_color">Buscar por color:</label>
-          <input type="text" class="form-control" name="color" id="field_color" data-cy="color" formControlName="color" />
+          <input
+            type="text"
+            class="form-control"
+            name="color"
+            id="field_color"
+            data-cy="color"
+            formControlName="color"
+            placeholder="Buscar por color"
+          />
+          <button type="submit" class="btn btn-primary"><fa-icon icon="search"></fa-icon>&nbsp;<span>Buscar</span></button>
         </div>
-
-        <button type="submit" class="btn btn-primary"><fa-icon icon="search"></fa-icon>&nbsp;<span>Buscar</span></button>
       </form>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="form-group">
+        <label class="form-control-label" for="field_busquedaColor">Buscar por color on change:</label><br />
+        <input
+          type="text"
+          class="form-control"
+          name="color"
+          id="field_busquedaColor"
+          [(ngModel)]="busquedaColor"
+          (ngModelChange)="buscarColorOnChange()"
+          placeholder="Buscar por color"
+        />
+      </div>
     </div>
 
     <div class="d-flex justify-content-end">

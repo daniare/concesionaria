@@ -189,4 +189,18 @@ public class CocheResource {
         List<Coche> coches = cocheService.findAllByColor(color);
         return ResponseEntity.ok().body(coches);
     }
+
+    /**
+     * {@code GET  /coches/coches-by-color} : get all the coches by color.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of coches in body.
+     */
+    @GetMapping("/coches/coches-by-color-like/{color}")
+    public ResponseEntity<List<Coche>> getAllCochesLike(@PathVariable String color) {
+        log.debug("Return all cars by the");
+        //String color = "amarillo";
+        List<Coche> coches = cocheService.findAllByColorStartingWith(color);
+        return ResponseEntity.ok().body(coches);
+    }
 }

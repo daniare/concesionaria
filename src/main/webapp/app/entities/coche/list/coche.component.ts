@@ -9,7 +9,7 @@ import { ICoche } from '../coche.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { CocheService } from '../service/coche.service';
 import { CocheDeleteDialogComponent } from '../delete/coche-delete-dialog.component';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'jhi-coche',
@@ -27,6 +27,7 @@ export class CocheComponent implements OnInit {
   editForm = this.fb.group({
     color: [],
   });
+  busquedaColor = '';
 
   constructor(
     protected cocheService: CocheService,
@@ -41,7 +42,6 @@ export class CocheComponent implements OnInit {
     const pageToLoad: number = page ?? this.page ?? 1;
 
     this.cocheService
-      //.findAllByColor()
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
@@ -63,10 +63,11 @@ export class CocheComponent implements OnInit {
     this.handleNavigation();
   }
 
-  //Buscar por color
-  buscarColor(page?: number, dontNavigate?: boolean): void {
+  /*
+  Filtrado de búsqueda por
+  */
+  buscarColor(): void {
     this.isLoading = true;
-    const pageToLoad: number = page ?? this.page ?? 1;
 
     if (!this.editForm.get(['color'])!.value) {
       this.loadPage();
@@ -74,7 +75,26 @@ export class CocheComponent implements OnInit {
       this.cocheService.findAllByColor(this.editForm.get(['color'])!.value).subscribe({
         next: (res: HttpResponse<ICoche[]>) => {
           this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          this.coches = res.body ?? [];
+        },
+        error: () => {
+          this.isLoading = false;
+          this.onError();
+        },
+      });
+    }
+  }
+
+  buscarColorOnChange(): void {
+    this.isLoading = true;
+
+    if (this.busquedaColor === '') {
+      this.loadPage();
+    } else {
+      this.cocheService.findAllByColorStartingWith(this.busquedaColor).subscribe({
+        next: (res: HttpResponse<ICoche[]>) => {
+          this.isLoading = false;
+          this.coches = res.body ?? [];
         },
         error: () => {
           this.isLoading = false;

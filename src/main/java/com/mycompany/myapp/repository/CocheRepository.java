@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CocheRepository extends JpaRepository<Coche, Long> {
     List<Coche> findAllByColor(String color);
+
+    List<Coche> findAllByColorStartingWith(String color);
 }

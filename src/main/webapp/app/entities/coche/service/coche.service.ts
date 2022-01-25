@@ -36,10 +36,16 @@ export class CocheService {
     const options = createRequestOption(req);
     return this.http.get<ICoche[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
-  //All by color
+  /*
+  Busqueda por color
+  */
 
   findAllByColor(color: string): Observable<EntityArrayResponseType> {
     return this.http.get<ICoche[]>(`${this.resourceUrl}/coches-by-color/${color}`, { observe: 'response' });
+  }
+
+  findAllByColorStartingWith(color: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICoche[]>(`${this.resourceUrl}/coches-by-color-like/${color}`, { observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

@@ -56,4 +56,12 @@ public interface CocheService {
      * @return lista de los coches del mismo color.
      */
     List<Coche> findAllByColor(String color);
+
+    /**
+     * Obtiene todos los coche por el color.
+     *
+     * @param color the pagination information.
+     * @return lista de los coches del mismo color.
+     */
+    List<Coche> findAllByColorStartingWith(String color);
 }
