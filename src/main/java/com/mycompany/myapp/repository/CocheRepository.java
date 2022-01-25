@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Coche;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CocheRepository extends JpaRepository<Coche, Long> {}
+public interface CocheRepository extends JpaRepository<Coche, Long> {
+    List<Coche> findAllByColor(String color);
+}

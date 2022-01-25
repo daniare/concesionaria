@@ -9,6 +9,7 @@ import { ICoche } from '../coche.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { CocheService } from '../service/coche.service';
 import { CocheDeleteDialogComponent } from '../delete/coche-delete-dialog.component';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'jhi-coche',
@@ -23,12 +24,16 @@ export class CocheComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  editForm = this.fb.group({
+    color: [],
+  });
 
   constructor(
     protected cocheService: CocheService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected fb: FormBuilder
   ) {}
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -36,6 +41,7 @@ export class CocheComponent implements OnInit {
     const pageToLoad: number = page ?? this.page ?? 1;
 
     this.cocheService
+      //.findAllByColor()
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
@@ -55,6 +61,27 @@ export class CocheComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  //Buscar por color
+  buscarColor(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    if (!this.editForm.get(['color'])!.value) {
+      this.loadPage();
+    } else {
+      this.cocheService.findAllByColor(this.editForm.get(['color'])!.value).subscribe({
+        next: (res: HttpResponse<ICoche[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        error: () => {
+          this.isLoading = false;
+          this.onError();
+        },
+      });
+    }
   }
 
   trackId(index: number, item: ICoche): number {

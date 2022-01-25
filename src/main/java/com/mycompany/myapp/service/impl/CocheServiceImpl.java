@@ -3,6 +3,7 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Coche;
 import com.mycompany.myapp.repository.CocheRepository;
 import com.mycompany.myapp.service.CocheService;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,5 +82,12 @@ public class CocheServiceImpl implements CocheService {
     public void delete(Long id) {
         log.debug("Request to delete Coche : {}", id);
         cocheRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Coche> findAllByColor(String color) {
+        log.debug("Request to get all Coches that have a color ");
+        return cocheRepository.findAllByColor(color);
     }
 }

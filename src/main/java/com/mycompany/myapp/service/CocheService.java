@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.Coche;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,4 +48,12 @@ public interface CocheService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Obtiene todos los coche por el color.
+     *
+     * @param color the pagination information.
+     * @return lista de los coches del mismo color.
+     */
+    List<Coche> findAllByColor(String color);
 }
