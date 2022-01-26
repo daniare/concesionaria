@@ -69,8 +69,10 @@ public interface CocheService {
      * Obtiene todos los coche por el color.
      *
      * @param modelo the pagination information.
+     * @param pageable
      * @return lista de los coches del mismo color.
      */
-    //List<Coche> findAllByModelo(String modelo);
+    Page<Coche> findAllByModelo(String modelo, Pageable pageable);
+
     List<Coche> findAllByModeloStartingWith(String modelo);
 }

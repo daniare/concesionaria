@@ -118,4 +118,11 @@ public class CocheServiceImpl implements CocheService {
             return cocheRepository.findAllByModeloStartingWith(modelo);
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Coche> findAllByModelo(String modelo, Pageable pageable) {
+        log.debug("Request to get all Coches that have a model ");
+        return cocheRepository.findAllByModelo(modelo, pageable);
+    }
 }

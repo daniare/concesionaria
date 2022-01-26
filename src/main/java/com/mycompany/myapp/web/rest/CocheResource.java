@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.Coche;
 import com.mycompany.myapp.repository.CocheRepository;
 import com.mycompany.myapp.service.CocheService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import io.undertow.servlet.handlers.security.ServletSecurityConstraintHandler;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -211,11 +212,12 @@ public class CocheResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of coches in body.
      */
     @GetMapping("/coches/coches-by-modelo/{modelo}")
-    public ResponseEntity<List<Coche>> findAllByModelo(@PathVariable String modelo) {
+    public ResponseEntity<List<Coche>> findAllByModelo(@PathVariable String modelo, Pageable pageable) {
         log.debug("Return all cars by the modelo");
 
-        //List<Coche> coches = cocheService.findAllByModelo(modelo);
-        List<Coche> coches = cocheService.findAllByModeloStartingWith(modelo);
-        return ResponseEntity.ok().body(coches);
+        Page<Coche> page = cocheService.findAllByModelo(modelo, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        //List<Coche> coches = cocheService.findAllByModeloStartingWith(modelo);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

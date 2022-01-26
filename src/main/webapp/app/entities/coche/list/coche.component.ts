@@ -105,22 +105,29 @@ export class CocheComponent implements OnInit {
     }
   }
 
-  findAllByModelo(): void {
+  findAllByModelo(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
 
     if (this.busquedaModelo === '') {
       this.loadPage();
     } else {
-      this.cocheService.findAllByModelo(this.busquedaModelo).subscribe({
-        next: (res: HttpResponse<ICoche[]>) => {
-          this.isLoading = false;
-          this.coches = res.body ?? [];
-        },
-        error: () => {
-          this.isLoading = false;
-          this.onError();
-        },
-      });
+      this.cocheService
+        .findAllByModelo(this.busquedaModelo, {
+          page: pageToLoad - 1,
+          size: this.itemsPerPage,
+          sort: this.sort(),
+        })
+        .subscribe({
+          next: (res: HttpResponse<ICoche[]>) => {
+            this.isLoading = false;
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+          },
+          error: () => {
+            this.isLoading = false;
+            this.onError();
+          },
+        });
     }
   }
 
