@@ -3,6 +3,7 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Empleado;
 import com.mycompany.myapp.repository.EmpleadoRepository;
 import com.mycompany.myapp.service.EmpleadoService;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,5 +76,15 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public void delete(Long id) {
         log.debug("Request to delete Empleado : {}", id);
         empleadoRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Empleado> findAllByActivoTrue() {
+        return empleadoRepository.findAllByActivoTrue();
+    }
+
+    @Override
+    public List<Empleado> findAllByActivoFalse() {
+        return empleadoRepository.findAllByActivoFalse();
     }
 }

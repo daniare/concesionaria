@@ -48,6 +48,10 @@ export class CocheService {
     return this.http.get<ICoche[]>(`${this.resourceUrl}/coches-by-color-like/${color}`, { observe: 'response' });
   }
 
+  findAllByModelo(modelo: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICoche[]>(`${this.resourceUrl}/coches-by-modelo/${modelo}`, { observe: 'response' });
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

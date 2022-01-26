@@ -178,4 +178,17 @@ public class EmpleadoResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /*
+    Filtrado por activo o no activo
+    */
+
+    @GetMapping("/empleados/active/{activo}")
+    public List<Empleado> findAllByActivo(@PathVariable Boolean activo) {
+        if (activo) {
+            return empleadoService.findAllByActivoTrue();
+        } else {
+            return empleadoService.findAllByActivoFalse();
+        }
+    }
 }

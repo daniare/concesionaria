@@ -23,6 +23,7 @@ export class EmpleadoComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  activo = true;
 
   constructor(
     protected empleadoService: EmpleadoService,
@@ -31,26 +32,20 @@ export class EmpleadoComponent implements OnInit {
     protected modalService: NgbModal
   ) {}
 
-  loadPage(page?: number, dontNavigate?: boolean): void {
+  loadPage(): void {
     this.isLoading = true;
-    const pageToLoad: number = page ?? this.page ?? 1;
+    this.activo = true;
 
-    this.empleadoService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe({
-        next: (res: HttpResponse<IEmpleado[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-        },
-        error: () => {
-          this.isLoading = false;
-          this.onError();
-        },
-      });
+    this.empleadoService.findAllByActive(this.activo).subscribe({
+      next: (res: HttpResponse<IEmpleado[]>) => {
+        this.isLoading = false;
+        this.empleados = res.body ?? [];
+      },
+      error: () => {
+        this.isLoading = false;
+        this.onError();
+      },
+    });
   }
 
   ngOnInit(): void {
@@ -72,6 +67,45 @@ export class EmpleadoComponent implements OnInit {
     });
   }
 
+  findAllByActivo(actividad: boolean): void {
+    this.isLoading = true;
+    this.activo = actividad;
+
+    this.empleadoService.findAllByActive(this.activo).subscribe({
+      next: (res: HttpResponse<IEmpleado[]>) => {
+        this.isLoading = false;
+        this.empleados = res.body ?? [];
+      },
+      error: () => {
+        this.isLoading = false;
+        this.onError();
+      },
+    });
+  }
+
+  findAllEmpeados(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+    this.activo = true;
+
+    this.empleadoService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe({
+        next: (res: HttpResponse<IEmpleado[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        error: () => {
+          this.isLoading = false;
+          this.onError();
+        },
+      });
+  }
+
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
@@ -90,7 +124,7 @@ export class EmpleadoComponent implements OnInit {
       if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
         this.predicate = predicate;
         this.ascending = ascending;
-        this.loadPage(pageNumber, true);
+        this.loadPage();
       }
     });
   }

@@ -59,4 +59,8 @@ export class EmpleadoService {
     }
     return empleadoCollection;
   }
+
+  findAllByActive(activo: boolean): Observable<EntityArrayResponseType> {
+    return this.http.get<IEmpleado[]>(`${this.resourceUrl}/active/${String(activo)}`, { observe: 'response' });
+  }
 }

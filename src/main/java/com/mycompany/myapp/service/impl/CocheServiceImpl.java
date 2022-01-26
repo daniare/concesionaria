@@ -97,4 +97,25 @@ public class CocheServiceImpl implements CocheService {
         log.debug("Request to get all Coches that have a color ");
         return cocheRepository.findAllByColorStartingWith(color);
     }
+
+    /*
+    @Override
+    @Transactional(readOnly = true)
+    public List<Coche> findAllByModelo(String modelo) {
+        log.debug("Request to get all Coches that have a model ");
+        return cocheRepository.findAllByModelo(modelo);
+
+    }
+    */
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Coche> findAllByModeloStartingWith(String modelo) {
+        log.debug("Request to get all Coches that have a model ");
+        if ("".equals(modelo)) {
+            return cocheRepository.findAll();
+        } else {
+            return cocheRepository.findAllByModeloStartingWith(modelo);
+        }
+    }
 }

@@ -28,6 +28,7 @@ export class CocheComponent implements OnInit {
     color: [],
   });
   busquedaColor = '';
+  busquedaModelo = '';
 
   constructor(
     protected cocheService: CocheService,
@@ -92,6 +93,25 @@ export class CocheComponent implements OnInit {
       this.loadPage();
     } else {
       this.cocheService.findAllByColorStartingWith(this.busquedaColor).subscribe({
+        next: (res: HttpResponse<ICoche[]>) => {
+          this.isLoading = false;
+          this.coches = res.body ?? [];
+        },
+        error: () => {
+          this.isLoading = false;
+          this.onError();
+        },
+      });
+    }
+  }
+
+  findAllByModelo(): void {
+    this.isLoading = true;
+
+    if (this.busquedaModelo === '') {
+      this.loadPage();
+    } else {
+      this.cocheService.findAllByModelo(this.busquedaModelo).subscribe({
         next: (res: HttpResponse<ICoche[]>) => {
           this.isLoading = false;
           this.coches = res.body ?? [];
